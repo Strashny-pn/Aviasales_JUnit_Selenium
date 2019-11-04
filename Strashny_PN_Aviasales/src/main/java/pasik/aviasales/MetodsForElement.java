@@ -1,6 +1,7 @@
 package pasik.aviasales;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -9,7 +10,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import static pasik.aviasales.Webdriver.TIME_OUT_CLICKABLE;
 
@@ -66,7 +69,7 @@ public final class MetodsForElement {
             String currentDate = str.split(" ")[0] + " " + str.split(" ")[1] + " " + str.split(" ")[2] + " " + str.split(" ")[5];
             waitWebElement("//div[@aria-label='" + currentDate + "']").click();
         } else if (data.contains("Текущая дата +")) {
-            int day = Integer.parseInt(data.replace("Текущая дата +",""));
+            int day = Integer.parseInt(data.replace("Текущая дата +", ""));
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, day);
             String str = cal.getTime().toString();
@@ -80,22 +83,42 @@ public final class MetodsForElement {
     public static void clickWebElementByXpath(String xpath) {
         Webdriver.getWebdriver().findElement(By.xpath(xpath)).click();
     }
-    public static void setKolvoPassage(int man, int children, int baby) {
 
+    public static void setKolPassage(int man, int children, int baby) {
+
+        List<String> manChildrenBaby = Arrays.asList("Взрослые", "Дети", "Младенцы");
+        for (String k : manChildrenBaby) {
+            int typePassage;
+            if (k.equals("Взрослые")) {
+                typePassage = man;
+            } else if (k.equals("Дети")) {
+                typePassage = children;
+            } else {
+                typePassage = baby;
+            }
+            for (int i = 0; i < 10; i++) {
+                int col = Integer.parseInt(waitWebElement("//div[@class='additional-fields__passenger-title']/strong[text()='" + k + "']/../following-sibling::div//span").getText());
+                if (col < typePassage) {
+                    clickWebElementByXpath("//div[@class='additional-fields__passenger-title']/strong[text()='" + k + "']/../following-sibling::div//a[contains(@class, 'control --increment')]");
+                } else if (col > typePassage) {
+                    clickWebElementByXpath("//div[@class='additional-fields__passenger-title']/strong[text()='" + k + "']/../following-sibling::div//a[contains(@class, 'control --decrement')]");
+                } else {
+                    break;
+                }
+            }
+        }
     }
 
-    //div[@class='additional-fields__passenger-title']/strong[text()='Взрослые']/../following-sibling::div//span
-    //div[@class='additional-fields__passenger-title']/strong[text()='Взрослые']/../following-sibling::div//a[contains(@class, 'control --decrement')]
-    //div[@class='additional-fields__passenger-title']/strong[text()='Взрослые']/../following-sibling::div//a[contains(@class, 'control --increment')]
+    public static Boolean invisibleElement(String xpath) {
+        WebDriverWait wait = new WebDriverWait(Webdriver.getWebdriver(), TIME_OUT_CLICKABLE);
+        return wait.until(ExpectedConditions.invisibilityOf(Webdriver.getWebdriver().findElement(By.xpath(xpath))));
+    }
 
-    //div[@class='additional-fields__passenger-title']/strong[text()='Дети']/../following-sibling::div//span
-    //div[@class='additional-fields__passenger-title']/strong[text()='Дети']/../following-sibling::div//a[@class='additional-fields__passenger-control --decrement']
-    //div[@class='additional-fields__passenger-title']/strong[text()='Дети']/../following-sibling::div//a[@class='additional-fields__passenger-control --increment']
-
-    //div[@class='additional-fields__passenger-title']/strong[text()='Младенцы']/../following-sibling::div//span
-    //div[@class='additional-fields__passenger-title']/strong[text()='Младенцы']/../following-sibling::div//a[contains(@class, 'control --decrement')]
-    //div[@class='additional-fields__passenger-title']/strong[text()='Младенцы']/../following-sibling::div//a[contains(@class, 'control --increment')]
-
+    public static void clickElementByJsByXpath(String path) {
+        WebElement element = Webdriver.getWebdriver().findElement(By.xpath(path));
+        JavascriptExecutor executor = (JavascriptExecutor) Webdriver.getWebdriver();
+        executor.executeScript("arguments[0].click();", element);
+    }
 
     public static void closeChrome() {
         Webdriver.getWebdriver().close();
