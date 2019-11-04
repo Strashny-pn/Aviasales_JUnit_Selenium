@@ -20,20 +20,5 @@ public class AviaSalesBasicTest {
         }
         closeChrome();
     }
-
-
-//    @Test
-//    public void testToDouble() {
-//        assertEquals(3.1415, StringUtils.toDouble("3.1415"), 0.0001);
-//        assertEquals("Not NaN for null", Double.NaN, StringUtils.toDouble(null), 0.00001);
-//    }
-//
-//    @Test
-//    public void testFromDouble() {
-//        double source = 3.1415;
-//        String expected="3.1415";
-//
-//        String actual = StringUtils.fromDouble(source);
-//        assertEquals("Unexpected string value", expected, actual);
-//    }
+    
 }
