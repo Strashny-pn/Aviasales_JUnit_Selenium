@@ -13,12 +13,13 @@ public class AviaSalesBasicTest {
         Goto();
         fillFieldById("origin", "Санкт – Петербург");
         fillFieldById("destination", "Екатеринбург");
+        waitWebElement("//div[@class='datefield-dropdown__header' and text()='Дата вылета']");
         try {
-            sleep(10000);
+            sleep(8000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         closeChrome();
     }
-
 }
