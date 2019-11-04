@@ -1,7 +1,9 @@
 package junit;
 
+import com.sun.org.glassfish.gmbal.NameValue;
 import org.junit.Test;
-import pasik.aviasales.MetodsForElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import static java.lang.Thread.sleep;
 import static pasik.aviasales.MetodsForElement.*;
@@ -13,7 +15,12 @@ public class AviaSalesBasicTest {
         Goto();
         fillFieldById("origin", "Санкт – Петербург");
         fillFieldById("destination", "Екатеринбург");
-        waitWebElement("//div[@class='datefield-dropdown__header' and text()='Дата вылета']");
+        waitWebElement("//label[@class='price-switcher__label' and text()='Показать цены в одну сторону']");
+        setData("Текущая дата");
+        waitWebElement("//div[@class='return-clear' and text()='Обратный билет не нужен']");
+        setData("Текущая дата +10");
+        clickWebElementByXpath("//div[@class='of_main_form__additional-fields']");
+
         try {
             sleep(8000);
         } catch (InterruptedException e) {
