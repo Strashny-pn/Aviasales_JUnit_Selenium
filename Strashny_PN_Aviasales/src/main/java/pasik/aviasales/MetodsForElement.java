@@ -17,37 +17,54 @@ import java.util.List;
 import static pasik.aviasales.Webdriver.TIME_OUT_CLICKABLE;
 
 /**
- * Collection for WebElement
+ * Методы для работы с вебэлементами страницы
  */
 public final class MetodsForElement {
 
     /**
-     * Converts double to string.
-     *
-     * @return Textual representation of double.
+     * Метод запускает chrome
      */
-
-
     public static void Goto() {
         Webdriver.getInstance();
     }
 
+
+    /**
+     * Метод ожидает когда элемент станет кликабельным, время ожидание храниься в "config.property"
+     * @param xpath - xpath до вебэлемента
+     */
+    public static WebElement waitWebElement(String xpath) {
+        WebDriverWait wait = new WebDriverWait(Webdriver.getWebdriver(), TIME_OUT_CLICKABLE);
+        return wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+    }
+
+    /**
+     * Метод ожидает когда элемент станет кликабельным, время ожидание храниься в "config.property"
+     * @param webElement - вебэлемент который должен стать кликабельным
+     */
+    public static WebElement waitWebElement(WebElement webElement) {
+        WebDriverWait wait = new WebDriverWait(Webdriver.getWebdriver(), TIME_OUT_CLICKABLE);
+        return wait.until(ExpectedConditions.elementToBeClickable(webElement));
+    }
+
+    /**
+     * Метод вставляет в поле данные из буфера обмена (т.к. sendkeys отрабатывает не коректно из за
+     * джава скрипта который висит на элементах)
+     * @param id - id вебэлемента
+     * @param text - текст которым заполняется поле
+     */
     public static void fillFieldById(String id, String text) {
         WebElement webElement = Webdriver.getWebdriver().findElement(By.xpath("//*[@id='" + id + "']"));
         waitWebElement(webElement);
         pasteTextField(webElement, text);
     }
 
-    public static WebElement waitWebElement(String xpath) {
-        WebDriverWait wait = new WebDriverWait(Webdriver.getWebdriver(), TIME_OUT_CLICKABLE);
-        return wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
-    }
-
-    public static WebElement waitWebElement(WebElement webElement) {
-        WebDriverWait wait = new WebDriverWait(Webdriver.getWebdriver(), TIME_OUT_CLICKABLE);
-        return wait.until(ExpectedConditions.elementToBeClickable(webElement));
-    }
-
+    /**
+     * Метод вставляет в поле данные из буфера обмена (т.к. sendkeys отрабатывает не коректно из за
+     * джава скрипта который висит на элементах)
+     * @param webElement - который нужно заполнить данными
+     * @param text - текст которым заполняется поле
+     */
     public static void pasteTextField(WebElement webElement, String text) {
         StringSelection selection = new StringSelection(text);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -57,6 +74,7 @@ public final class MetodsForElement {
     }
 
     /**
+     * Метод заполняет каледарь требуемыми датами
      * @param data - переменная типа текст. Текст может быть трех типов
      *             1: Переменая может содержать значение "Текущая дата" - выставит текущую дату.
      *             2: Переменная может содержать значение "Текущая дата + 7" - выставить дату познее текущей на 7 дней
@@ -80,12 +98,22 @@ public final class MetodsForElement {
         }
     }
 
+    /**
+     * Метод кликает на элемент который находит по xpath
+     * @param xpath - xpath по которому находиться элемент
+     */
     public static void clickWebElementByXpath(String xpath) {
         Webdriver.getWebdriver().findElement(By.xpath(xpath)).click();
     }
 
+    /**
+     * Метод заполняет фильтр количество пассажиров взрослых детей и младенцев цикл for сделан до 10 потому,что нельзя
+     * купить больше 9 билетов
+     * @param man - количество взрослых
+     * @param children - количество детей с 2 до 12 лет
+     * @param baby - количество младенцев
+     */
     public static void setKolPassage(int man, int children, int baby) {
-
         List<String> manChildrenBaby = Arrays.asList("Взрослые", "Дети", "Младенцы");
         for (String k : manChildrenBaby) {
             int typePassage;
@@ -109,17 +137,29 @@ public final class MetodsForElement {
         }
     }
 
+    /**
+     * Метод ждет пока исчезнет элемент со страницы
+     * @param xpath - xpath до элемена который должен изчезнуть
+     */
     public static Boolean invisibleElement(String xpath) {
         WebDriverWait wait = new WebDriverWait(Webdriver.getWebdriver(), TIME_OUT_CLICKABLE);
         return wait.until(ExpectedConditions.invisibilityOf(Webdriver.getWebdriver().findElement(By.xpath(xpath))));
     }
 
-    public static void clickElementByJsByXpath(String path) {
-        WebElement element = Webdriver.getWebdriver().findElement(By.xpath(path));
+    /**
+     * Метод кликает на элемент с помощью JS (Джава скрипт) т.к. нажать кнопку "Найти билеты" стандартными средствами
+     * Selenium не удается
+     * @param xpath - xpath до элемента по которому надо кликнуть
+     */
+    public static void clickElementByJsByXpath(String xpath) {
+        WebElement element = Webdriver.getWebdriver().findElement(By.xpath(xpath));
         JavascriptExecutor executor = (JavascriptExecutor) Webdriver.getWebdriver();
         executor.executeScript("arguments[0].click();", element);
     }
 
+    /**
+     * Метод закрывает chrome
+     */
     public static void closeChrome() {
         Webdriver.getWebdriver().close();
         Webdriver.getWebdriver().quit();

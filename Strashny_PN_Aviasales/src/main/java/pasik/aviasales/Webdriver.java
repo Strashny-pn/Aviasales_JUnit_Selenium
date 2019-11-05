@@ -1,17 +1,8 @@
 package pasik.aviasales;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -23,6 +14,9 @@ public class Webdriver {
     private static ChromeDriver webDriver = null;
     private static Webdriver instance;
 
+    /**
+     * В общем делаем singleton и запускаем chrome c параметрами из "config.property"
+     */
     private Webdriver() {
         FileInputStream fileInputStream;
         Properties prop = new Properties();
@@ -56,6 +50,4 @@ public class Webdriver {
     public static ChromeDriver getWebdriver() {
         return webDriver;
     }
-
-
 }
