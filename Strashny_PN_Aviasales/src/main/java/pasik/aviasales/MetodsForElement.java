@@ -31,6 +31,7 @@ public final class MetodsForElement {
 
     /**
      * Метод ожидает когда элемент станет кликабельным, время ожидание храниься в "config.property"
+     *
      * @param xpath - xpath до вебэлемента
      */
     public static WebElement waitWebElement(String xpath) {
@@ -40,6 +41,7 @@ public final class MetodsForElement {
 
     /**
      * Метод ожидает когда элемент станет кликабельным, время ожидание храниься в "config.property"
+     *
      * @param webElement - вебэлемент который должен стать кликабельным
      */
     public static WebElement waitWebElement(WebElement webElement) {
@@ -50,7 +52,8 @@ public final class MetodsForElement {
     /**
      * Метод вставляет в поле данные из буфера обмена (т.к. sendkeys отрабатывает не коректно из за
      * джава скрипта который висит на элементах)
-     * @param id - id вебэлемента
+     *
+     * @param id   - id вебэлемента
      * @param text - текст которым заполняется поле
      */
     public static void fillFieldById(String id, String text) {
@@ -62,8 +65,9 @@ public final class MetodsForElement {
     /**
      * Метод вставляет в поле данные из буфера обмена (т.к. sendkeys отрабатывает не коректно из за
      * джава скрипта который висит на элементах)
+     *
      * @param webElement - который нужно заполнить данными
-     * @param text - текст которым заполняется поле
+     * @param text       - текст которым заполняется поле
      */
     public static void pasteTextField(WebElement webElement, String text) {
         StringSelection selection = new StringSelection(text);
@@ -75,6 +79,7 @@ public final class MetodsForElement {
 
     /**
      * Метод заполняет каледарь требуемыми датами
+     *
      * @param data - переменная типа текст. Текст может быть трех типов
      *             1: Переменая может содержать значение "Текущая дата" - выставит текущую дату.
      *             2: Переменная может содержать значение "Текущая дата + 7" - выставить дату познее текущей на 7 дней
@@ -100,6 +105,7 @@ public final class MetodsForElement {
 
     /**
      * Метод кликает на элемент который находит по xpath
+     *
      * @param xpath - xpath по которому находиться элемент
      */
     public static void clickWebElementByXpath(String xpath) {
@@ -109,9 +115,10 @@ public final class MetodsForElement {
     /**
      * Метод заполняет фильтр количество пассажиров взрослых детей и младенцев цикл for сделан до 10 потому,что нельзя
      * купить больше 9 билетов
-     * @param man - количество взрослых
+     *
+     * @param man      - количество взрослых
      * @param children - количество детей с 2 до 12 лет
-     * @param baby - количество младенцев
+     * @param baby     - количество младенцев
      */
     public static void setKolPassage(int man, int children, int baby) {
         List<String> manChildrenBaby = Arrays.asList("Взрослые", "Дети", "Младенцы");
@@ -139,6 +146,7 @@ public final class MetodsForElement {
 
     /**
      * Метод ждет пока исчезнет элемент со страницы
+     *
      * @param xpath - xpath до элемена который должен изчезнуть
      */
     public static Boolean invisibleElement(String xpath) {
@@ -149,6 +157,7 @@ public final class MetodsForElement {
     /**
      * Метод кликает на элемент с помощью JS (Джава скрипт) т.к. нажать кнопку "Найти билеты" стандартными средствами
      * Selenium не удается
+     *
      * @param xpath - xpath до элемента по которому надо кликнуть
      */
     public static void clickElementByJsByXpath(String xpath) {
@@ -156,6 +165,19 @@ public final class MetodsForElement {
         JavascriptExecutor executor = (JavascriptExecutor) Webdriver.getWebdriver();
         executor.executeScript("arguments[0].click();", element);
     }
+
+    public static boolean checkPriceTicket() {
+        List<WebElement> webElementList = Webdriver.getWebdriver().findElements(By.xpath("//span[@class='buy-button__price']/span[@class='price --rub']"));
+        boolean flag = true;
+        int price = 0;
+        for (WebElement element : webElementList) {
+            if (price > Integer.parseInt(element.getText().replaceAll("[^\\p{Nd}]+", ""))) {
+                flag = false;
+            }
+        }
+        return flag;
+    }
+
 
     /**
      * Метод закрывает chrome

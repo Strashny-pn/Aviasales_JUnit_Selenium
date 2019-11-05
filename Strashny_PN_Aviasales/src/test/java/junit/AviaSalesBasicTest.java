@@ -1,5 +1,6 @@
 package junit;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static pasik.aviasales.MetodsForElement.*;
@@ -18,7 +19,7 @@ public class AviaSalesBasicTest {
     //Выставляем дату вылета и дату возвращения
         waitWebElement("//label[@class='price-switcher__label' and text()='Показать цены в одну сторону']");
         // устанавливаем текущую дату
-        setData("Текущая дата");
+        setData("Текущая дата +2");
         waitWebElement("//div[@class='return-clear' and text()='Обратный билет не нужен']");
         // устанавливаем текущую дату плюс 10 дней
         setData("Текущая дата +10");
@@ -47,6 +48,8 @@ public class AviaSalesBasicTest {
         clickWebElementByXpath("//div[@class='filter__header' and text()='Багаж']");
         clickWebElementByXpath("//div[@class='filter__header' and text()='Багаж']/..//label[@class='checkboxes-list__label' and text()='Все']");
         clickWebElementByXpath("//div[@class='filter__header' and text()='Багаж']/..//label[@class='checkboxes-list__label' and text()='Багаж и ручная кладь']");
+
+        Assert.assertTrue("Найденые билеты отсортированы в неправильном порядке", checkPriceTicket());
 
         closeChrome();
     }
