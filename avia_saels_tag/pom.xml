@@ -7,6 +7,11 @@
     <groupId>avia_saels_tag</groupId>
     <artifactId>avia_saels_tag</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-
+<dependencies>
+    <dependency>
+        <groupId>ru.sbtqa.tag.pagefactory</groupId>
+        <artifactId>web-plugin</artifactId>
+        <version>14.5.0</version>
+    </dependency>
+</dependencies>
 </project>
